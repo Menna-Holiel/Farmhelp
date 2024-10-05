@@ -1,0 +1,148 @@
+.home {
+    width: 100svw;
+    height: 100vh;
+    padding: 50px;
+    overflow-x: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.globe {
+    width: 400px;
+    height: 400px;
+    transition: 1s ease-in-out;
+    animation-name: rotate;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(90deg);
+    }
+
+    50% {
+        transform: rotate(180deg);
+    }
+
+    75% {
+        transform: rotate(270deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.leftSide {
+    width: 100%;
+    animation-name: goRight;
+    animation-duration: 2s;
+}
+
+@keyframes goRight {
+    0%{
+        transform: translateX(-250px);
+    }
+    100%{
+        transform: translateX(0px);
+    }
+}
+
+.leftSide h1 {
+    font-size: 35px;
+    line-height: 2;
+    text-align: center;
+    color: #1b2a85;
+    font-weight: bold;
+}
+
+.leftSide h3 {
+    font-size: 25px;
+}
+
+.rightSide {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.data {
+    width: 100svw;
+    height: 100vh;
+}
+
+.allData,
+.allPlant {
+    width: 100%;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.allData h1,
+.allPlant h1 {
+    font-size: 35px;
+    line-height: 2;
+    text-align: center;
+    color: #1b2a85;
+    font-weight: bolder;
+}
+
+table {
+    width: 70%;
+    padding: 20px;
+    text-align: center;
+    text-transform: capitalize;
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    border-radius: 20px;
+    border: none;
+    overflow: hidden;
+    box-shadow: 10px 5px 35px #333;
+}
+
+.allPlant table {
+    width: 50%;
+    text-align: center;
+}
+
+td,
+th {
+    text-align: center;
+    padding: 8px;
+}
+
+th {
+    font-size: 23px;
+}
+
+tr:nth-child(even) {
+    color: #fff;
+    background-color: #1b29859c;
+}
+
+@media only screen and (max-width: 971px) {
+    .home {
+        flex-direction: column;
+        margin-top: 100px;
+    }
+}
+
+input {
+    background: transparent;
+    border: none;
+    width: 40px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}

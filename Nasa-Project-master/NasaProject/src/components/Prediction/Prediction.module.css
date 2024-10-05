@@ -1,0 +1,137 @@
+.predictPage{
+    width: 100svw;
+    height: 70vh;
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.form {
+    width: 100%;
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.getData{
+    width: 100%;
+    display: flex;
+    gap: 30px;
+}
+
+.predictImage{
+    width: 100%;
+    position: relative;
+}
+
+.predictGlobe{
+    width: 50%;
+}
+.predictGlobe1{
+    width: 55%;
+    position: absolute;
+    bottom: 10px;
+    left: 70px;
+    animation-name: cloudRight;
+    animation-duration: 3.5s;
+}
+
+.predictGlobe2{
+    width: 40%;
+    position: absolute;
+    top: 10px;
+    left: -120px;
+    animation-name: cloudLeft;
+    animation-duration: 3.5s;
+}
+
+@keyframes cloudRight {
+    0%{
+        transform: translateX(200px);
+    }
+    100%{
+        transform: translateX(0px);
+    }
+}
+
+@keyframes cloudLeft {
+    0%{
+        transform: translateX(-200px);
+    }
+    100%{
+        transform: translateX(0px);
+    }
+}
+
+
+.allData,
+.allPlant {
+    width: 100%;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.allData h1,
+.allPlant h1 {
+    font-size: 35px;
+    line-height: 2;
+    text-align: center;
+    color: #1b2a85;
+    font-weight: bolder;
+}
+
+.label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+select,
+input[type="date"],
+button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+    background-color: #fff;
+}
+
+
+
+button {
+    background-color: #1b29859c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.error {
+    color: red;
+    margin-top: 10px;
+}
+
+.riskData{
+    width: 40%;
+}
+
+@media only screen and (max-width: 971px) {
+    .predictPage {
+        flex-direction: column;
+        margin-top: 100px;
+    }
+}

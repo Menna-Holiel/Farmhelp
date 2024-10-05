@@ -1,0 +1,44 @@
+{
+    "riskLevels": {
+        "1": {
+            "title": "Very Low",
+            "description": "The area is considered safe from flooding, and residents can feel secure."
+        },
+        "2": {
+            "title": "Low",
+            "description": "Minimal chance of flooding; typically considered safe."
+        },
+        "3": {
+            "title": "Moderate",
+            "description": "Some potential for flooding; caution advised, especially in vulnerable areas."
+        },
+        "4": {
+            "title": "Moderate",
+            "description": "Some potential for flooding; caution advised, especially in vulnerable areas."
+        },
+        "5": {
+            "title": "Elevated",
+            "description": "Noticeable risk of flooding; preparedness is important."
+        },
+        "6": {
+            "title": "Elevated",
+            "description": "Noticeable risk of flooding; preparedness is important."
+        },
+        "7": {
+            "title": "High",
+            "description": "Significant chance of flooding; residents should be on alert and ready to act."
+        },
+        "8": {
+            "title": "High",
+            "description": "Significant chance of flooding; residents should be on alert and ready to act."
+        },
+        "9": {
+            "title": "Extreme",
+            "description": "Very high likelihood of flooding; immediate action may be necessary, and evacuation could be warranted."
+        },
+        "10": {
+            "title": "Extreme",
+            "description": "Very high likelihood of flooding; immediate action may be necessary, and evacuation could be warranted."
+        }
+    }
+}

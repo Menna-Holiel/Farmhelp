@@ -1,0 +1,93 @@
+.navbar{
+    width: 100%;
+    height: 12%;
+    padding: 20px;
+    z-index: 1000;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background:linear-gradient(#1b2a85 , #1b298590 ) ;
+    color: #fff;
+}
+
+.logo{
+    width: 20%;
+}
+
+.logo h1{
+    font-family: "Londrina Solid", sans-serif;
+    font-size: 50px;
+    font-weight: 850;
+    color: #3247cc;
+    -webkit-text-stroke: 1px #fff;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    transition: 0.5s ease-out;
+    animation-name: logoRight;
+    animation-duration: 2s;
+}
+
+@keyframes logoRight {
+    0%{
+        transform: translateY(-50px);
+    }
+    100%{
+        transform: translateX(0px);
+    }
+}
+
+.logo h1:hover{
+    transform: scale(1.09);
+    color: #dae8d5;
+    filter: drop-shadow(5px 0px 30px rgba(249, 219, 181, 0.567) );
+
+}
+
+.links{
+    width: 50%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.navElement{
+    font-family: "Nerko One", cursive;
+    font-size: 28px;
+    display: inline-block;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+    transition: 0.5s ease-in;
+}
+
+.navElement::before{
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #fff;
+    transform: scale(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s;
+}
+
+.navElement:hover::before{
+    transform: scaleX(1);
+    background-color: #fff;
+    transform-origin: bottom left;
+}
+
+.navElement:hover{
+    color: #fff;
+    filter: drop-shadow(10px 10px 20px rgb(244, 205, 154) );
+}
+
+@media only screen and (max-width: 971px) {
+    .logo h1{
+        font-size: 40px;
+    }
+  }
