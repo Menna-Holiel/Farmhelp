@@ -1,4 +1,4 @@
-.predictPage{
+.predictPage {
     width: 100svw;
     height: 70vh;
     margin-top: 50px;
@@ -17,21 +17,22 @@
     margin-top: 50px;
 }
 
-.getData{
+.getData {
     width: 100%;
     display: flex;
     gap: 30px;
 }
 
-.predictImage{
+.predictImage {
     width: 100%;
     position: relative;
 }
 
-.predictGlobe{
+.predictGlobe {
     width: 50%;
 }
-.predictGlobe1{
+
+.predictGlobe1 {
     width: 55%;
     position: absolute;
     bottom: 10px;
@@ -40,7 +41,7 @@
     animation-duration: 3.5s;
 }
 
-.predictGlobe2{
+.predictGlobe2 {
     width: 40%;
     position: absolute;
     top: 10px;
@@ -50,19 +51,21 @@
 }
 
 @keyframes cloudRight {
-    0%{
+    0% {
         transform: translateX(200px);
     }
-    100%{
+
+    100% {
         transform: translateX(0px);
     }
 }
 
 @keyframes cloudLeft {
-    0%{
+    0% {
         transform: translateX(-200px);
     }
-    100%{
+
+    100% {
         transform: translateX(0px);
     }
 }
@@ -125,7 +128,7 @@ button:hover {
     margin-top: 10px;
 }
 
-.riskData{
+.riskData {
     width: 40%;
 }
 
@@ -134,4 +137,11 @@ button:hover {
         flex-direction: column;
         margin-top: 100px;
     }
+}
+
+.progress {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+
 }

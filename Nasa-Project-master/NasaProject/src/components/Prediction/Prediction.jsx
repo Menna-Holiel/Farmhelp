@@ -5,48 +5,89 @@ import riskLevelsData from './riskLevels.json';
 
 export default function Prediction() {
     const [state, setState] = useState('');
-    //const [date, setDate] = useState('');
     const [riskLevel, setRiskLevel] = useState(null);
     const [crops, setCrops] = useState([]);
     const [error, setError] = useState('');
     const [date, setDate] = useState('');
-    const [drought_msg, setDrought_msg] = useState('');
+    const [drought_msg, setDrought_msg] = useState(null); // Initialize with default structure
+
     // Function to get the current date in YYYY-MM-DD format
     const getCurrentDate = () => {
         const today = new Date();
         const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        drought_check();
+
+        // Check if state and date are provided
         if (!state || !date) {
             setError('Please select a state and a date.');
             return;
         }
 
+        // Convert date to year and month
+        const dateObj = new Date(date);
+        const year = dateObj.getFullYear();
+        const month = dateObj.getMonth() + 1;
+
+
         try {
-            const response = await fetch('http://localhost:7000/predictFlood', {
+            // Call flood prediction API
+            const floodResponse = await fetch('http://localhost:7000/predictFlood', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ state, date }),
+                body: JSON.stringify({ state, category: "Flood", year, month }),
             });
 
-            if (!response.ok) {
-                const data = await response.json();
-                throw new Error(data.error || 'Something went wrong');
+            if (!floodResponse.ok) {
+                const data = await floodResponse.json();
+                throw new Error(data.error || 'Something went wrong with flood prediction.');
             }
 
-            const data = await response.json();
-            setRiskLevel(data.risk_level);
+            const floodData = await floodResponse.json();
+            console.log(floodData);
+            setRiskLevel(floodData.prediction[0]);  // Use the flood prediction result
 
-            await fetchCropsByRisk(data.risk_level);
+            // Fetch crops based on flood risk
+            await fetchCropsByRisk(floodData.prediction);
+
+            // Call drought prediction API with the new payload structure
+            const payload = JSON.stringify({
+                stateAbbreviation: state,
+                year,
+                month
+                // input_data: [{
+                //     fields: ["stateAbbreviation", "year", "month"],
+                //     values: [[state, year, month]]
+                // }]
+            });
+
+            const droughtResponse = await fetch('http://localhost:7000/predictDrought', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: payload,
+            });
+
+            if (!droughtResponse.ok) {
+                const data = await droughtResponse.json();
+                console.log(data.error)
+                throw new Error(data.error || 'Error in drought prediction.');
+            }
+
+            const droughtData = await droughtResponse.json();
+            console.log(droughtData)
+            setDrought_msg(droughtData); // Set drought message based on the API response
         } catch (err) {
+
             setError(err.message);
         }
     };
@@ -57,7 +98,7 @@ export default function Prediction() {
 
             if (!response.ok) {
                 const data = await response.json();
-                throw new Error(data.error || 'Something went wrong while fetching crops');
+                throw new Error(data.error || 'Error while fetching crops.');
             }
 
             const cropsData = await response.json();
@@ -67,66 +108,70 @@ export default function Prediction() {
         }
     };
 
-    const drought_check = async () => {
-        try {
-            const response = await fetch('http://localhost:7000/predictDrought', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ state, date }),
-            });
 
-            if (!response.ok) {
-                const data = await response.json();
-                throw new Error(data.error || 'Something went wrong');
-            }
 
-            const data = await response.json();
 
-            setDrought_msg(data);
 
-        } catch (err) {
-            setError(err.message);
+
+    let riskPercentage;
+    let progressBarColor;
+
+    if (riskLevel !== null) {
+        if (riskLevel === 'Low') {
+            riskPercentage = 30;
+            progressBarColor = '#90ee90'; // Light green
+        } else if (riskLevel === 'Medium') {
+            riskPercentage = 60;
+            progressBarColor = '#ffc107'; // Yellow
+        } else if (riskLevel === 'High') {
+            riskPercentage = 90;
+            progressBarColor = '#dc3545';
+        } else {
+            riskPercentage = 0;
+            progressBarColor = '#6c757d';
         }
     }
 
-    const getRiskLevelInfo = (level) => {
-        if (level !== null && riskLevelsData.riskLevels[level]) {
-            return riskLevelsData.riskLevels[level];
+    let droughtPercentage;
+    let droughtColor;
+    if (drought_msg !== null) {
+        switch (drought_msg.prediction[0]) {
+            case 'None':
+                droughtPercentage = 0;
+                droughtColor = '#28a745'; // Green
+                break;
+            case 'Abnormally Dry':
+                droughtPercentage = 10;
+                droughtColor = '#28a745'; // Light green
+                break;
+            case 'Moderate Drought':
+                droughtPercentage = 40;
+                droughtColor = '#ffc107'; // Yellow
+                break;
+            case 'Severe Drought':
+                droughtPercentage = 60;
+                droughtColor = '#fd7e14'; // Orange
+                break;
+            case 'Extreme Drought':
+                droughtPercentage = 70;
+                droughtColor = '#dc3545'; // Red
+                break;
+            case 'Exceptional Drought':
+                droughtPercentage = 90;
+                droughtColor = '#b00020'; // Dark red
+                break;
+            default:
+                droughtPercentage = 0; // Default to None if unknown
+                droughtColor = '#28a745'; // Green
         }
-        return { title: 'N/A', description: '' };
-    };
-
-    const getRiskColor = (level) => {
-        switch (level) {
-            case 1: return '#28a745'; // Green
-            case 2: return '#28a745'; // Light Green
-            case 3: return '#ffc107'; // Light Yellow
-            case 4: return '#ffc107'; // Yellow
-            case 5: return '#ffc107'; // Yellow
-            case 6: return '#fd7e14'; // Orange
-            case 7: return '#fd7e14'; // Orange
-            case 8: return '#dc3545'; // Red
-            case 9: return '#dc3545'; // Red
-            case 10: return '#343a40'; // Dark Red
-            default: return '#ffffff'; // White
-        }
-    };
-
-    const riskInfo = getRiskLevelInfo(riskLevel);
-    const riskPercentage = riskLevel ? (riskLevel / 10) * 100 : 0;
-    const progressBarColor = getRiskColor(riskLevel);
-    const droughtPercentage = drought_msg.level == 'High' ? 70 : 10;
-    const droughtColor = drought_msg.level == 'High' ? '#fd7e14' : '#28a745';
+    }
 
     useEffect(() => {
-        // Set the initial date to the minimum date (today)
         setDate(getCurrentDate());
     }, []);
+
     return (
         <>
-
             <div className={stylePredict.predictPage}>
                 <div className={stylePredict.form}>
                     <form onSubmit={handleSubmit}>
@@ -194,7 +239,7 @@ export default function Prediction() {
                                     type="date"
                                     value={date}
                                     onChange={(e) => setDate(e.target.value)}
-                                    min={getCurrentDate()} // Restrict the date to today and future dates
+                                    min={getCurrentDate()}
                                 />
                             </div>
                         </div>
@@ -202,7 +247,6 @@ export default function Prediction() {
                         <button type="submit">Predict</button>
                     </form>
                     {error && <p className={stylePredict.error}>{error}</p>}
-
                 </div>
 
                 <div className={stylePredict.predictImage}>
@@ -220,16 +264,15 @@ export default function Prediction() {
                             <th className={stylePredict.riskData}>Risk</th>
                             <th>Level</th>
                         </tr>
-
                         <tr>
                             <td className={stylePredict.riskData}>Flood Risk</td>
                             <td>
-                                <h4>{riskInfo.title}</h4>
-                                <p>{riskInfo.description}</p>
+                                <h4>{riskLevel}</h4>
+
                                 {riskLevel !== null && (
-                                    <div className="progress my-3">
+                                    <div className="progress my-3" style={{ backgroundColor: 'white' }}>
                                         <div
-                                            className="progress-bar"
+                                            className="progress-bar progress"
                                             role="progressbar"
                                             style={{ width: `${riskPercentage}%`, backgroundColor: progressBarColor, height: '20px' }}
                                             aria-valuenow={riskPercentage}
@@ -244,38 +287,36 @@ export default function Prediction() {
                         </tr>
                         <tr>
                             <td className={stylePredict.riskData}>Drought Risk</td>
-                            <td>
-                                <h4>{drought_msg.level}</h4>
-                                <p>{drought_msg.msg}</p>
+                            {drought_msg !== null && (
+                                <td>
+                                    <h4>{drought_msg.prediction[0]}</h4>
 
-                                {riskLevel !== null && (
-                                    <div className="progress my-3">
-                                        <div
-                                            className="progress-bar"
-                                            role="progressbar"
-                                            style={{ width: `${droughtPercentage}%`, backgroundColor: droughtColor, height: '20px' }}
-                                            aria-valuenow={droughtPercentage}
-                                            aria-valuemin="0"
-                                            aria-valuemax="100"
-                                        >
-                                            {droughtPercentage.toFixed(2)}%
+                                    {drought_msg.prediction[0] && (
+                                        <div className="progress my-3" style={{ backgroundColor: 'white' }}>
+                                            <div
+                                                className="progress-bar"
+                                                role="progressbar"
+                                                style={{ width: `${droughtPercentage}%`, backgroundColor: droughtColor, height: '20px' }}
+                                                aria-valuenow={droughtPercentage}
+                                                aria-valuemin="0"
+                                                aria-valuemax="100"
+                                            >
+                                                {droughtPercentage.toFixed(2)}%
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
-                            </td>
+                                    )}
+                                </td>
+                            )}
                         </tr>
-
                     </table>
                 </div>
 
                 <div className={stylePredict.allPlant}>
                     <h1>Recommended Crops</h1>
                     <table>
-
                         <tr>
                             <th>Plants</th>
                         </tr>
-
                         {crops.length > 0 ? (
                             crops.map((crop, index) => (
                                 <tr key={index}>
