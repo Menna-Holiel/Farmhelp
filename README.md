@@ -49,7 +49,7 @@ We used Watson Machine Learning to automate the training, tuning, and deployment
 ensuring optimal performance predictions.
 
 ### Solution architecture
-![Solution architecture](Solution architecture.png)
+![Solution_architecture](Solution architecture.png)
 1.Farmers input state and other date.
 2.AI models predict flood and drought risks.
 3.The website gives the farmer crop recommendations based on that weather risk
