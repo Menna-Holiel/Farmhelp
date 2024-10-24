@@ -71,7 +71,7 @@ Sensors provide real-time environmental conditions and return the sutible crops
 In the future we plan to:
 Expand the dataset by including more regions and climatic factors to improve the accuracy of the flood and drought predictions.
 Advanced Crop Management: Incorporate more sensor data (such as nutrient levels) to provide precise recommendations for crop watering, fertilization, and pest control, enhancing overall agricultural efficiency.
-![Roadmap ](Roadmap Timeline.png)
+![Roadmap ](Roadmap_Timeline.png)
 ### Additional details
 ### How to run the project
 1.Clone the repository.
