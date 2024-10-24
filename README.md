@@ -85,8 +85,3 @@ npm start
 5.Start the frontend:
 npm start
 6.Ensure sensors are connected and transmitting data via Socket.io.
-
-
-
- 
-
